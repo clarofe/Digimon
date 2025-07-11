@@ -1,47 +1,103 @@
-const digimonList = document.getElementById('digimonList')
-const loadMoreButton = document.getElementById('loadMoreButton')
 
-const maxRecords = 151
-const limit = 10
-let offset = 0;
+const digimonList = document.getElementById('digimonList');
+const paginationContainer = document.getElementById('pagination-container');
+
+let allDigimons = [];     
+let currentPage = 1;      
+const itemsPerPage = 12;  
 
 function convertDigimonToLi(digimon) {
+    
+    const levelClass = digimon.level.toLowerCase().replace(/\s+/g, '-'); // Ex: "In Training" -> "in-training"
+    
     return `
-        <li class="digimon ${digimon.type}">
-            <span class="number">#${digimon.number}</span>
+        <li class="digimon ${levelClass}">
+            <span class="number">#${digimon.name}</span>
             <span class="name">${digimon.name}</span>
-
+            
             <div class="detail">
                 <ol class="types">
-                    ${digimon.types.map((type) => `<li class="type ${type}">${type}</li>`).join('')}
+                    <li class="type">${digimon.level}</li>
                 </ol>
-
-                <img src="${digimon.photo}"
-                     alt="${digimon.name}">
+                <img src="${digimon.img}" alt="${digimon.name}">
             </div>
         </li>
-    `
+    `;
 }
 
-function loadDigimonItens(offset, limit) {
-    digiApi.getDigimon(offset, limit).then((digimons = []) => {
-        const newHtml = digimons.map(convertDigimonToLi).join('')
-        digimonList.innerHTML += newHtml
-    })
+
+function displayPage(page) {
+    currentPage = page;
+  
+    digimonList.innerHTML = '';
+
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedDigimons = allDigimons.slice(startIndex, endIndex);
+
+    const newHtml = paginatedDigimons.map(convertDigimonToLi).join('');
+    digimonList.innerHTML = newHtml;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-loadDigimonItens(offset, limit)
+function setupPagination() {
 
-loadMoreButton.addEventListener('click', () => {
-    offset += limit
-    const qtdRecordsWithNexPage = offset + limit
+    paginationContainer.innerHTML = '';
+    
+    const pageCount = Math.ceil(allDigimons.length / itemsPerPage);
 
-    if (qtdRecordsWithNexPage >= maxRecords) {
-        const newLimit = maxRecords - offset
-        loadPokemonItens(offset, newLimit)
+    if (pageCount <= 1) return;
 
-        loadMoreButton.parentElement.removeChild(loadMoreButton)
-    } else {
-        loadPokemonItens(offset, limit)
+    const prevButton = document.createElement('button');
+    prevButton.innerText = 'Anterior';
+    prevButton.disabled = currentPage === 1;
+    prevButton.addEventListener('click', () => {
+        displayPage(currentPage - 1);
+        setupPagination(); 
+    });
+    paginationContainer.appendChild(prevButton);
+
+    
+    for (let i = 1; i <= pageCount; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.innerText = i;
+
+        if (i === currentPage) {
+            pageButton.classList.add('active');
+        }
+
+        pageButton.addEventListener('click', () => {
+            displayPage(i);
+            setupPagination(); 
+        });
+
+        paginationContainer.appendChild(pageButton);
     }
-})
+    
+
+    const nextButton = document.createElement('button');
+    nextButton.innerText = 'Próximo';
+    nextButton.disabled = currentPage === pageCount; 
+    nextButton.addEventListener('click', () => {
+        displayPage(currentPage + 1);
+        setupPagination(); 
+    });
+    paginationContainer.appendChild(nextButton);
+}
+
+
+function start() {
+    digiApi.getDigimons()
+        .then((digimonsData = []) => {
+            allDigimons = digimonsData; 
+            displayPage(1);            
+            setupPagination();          
+        })
+        .catch(error => {
+            console.error('Falha ao buscar os Digimons:', error);
+            digimonList.innerHTML = '<p class="error-message">Não foi possível carregar os Digimons. Tente recarregar a página.</p>';
+        });
+}
+
+start();
