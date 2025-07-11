@@ -1,81 +1,40 @@
+* {
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #4CAAE7;
+    padding-top: 56px;
+}
+
+.content {
+    height: 100vh;
+    padding: 1rem;
+    background-color: #ffffff70;
+}
+
+.content h1 {
+    margin: 0;
+     width: 250px;
+     height: 100px;
+    font-size: 3em;
+    color: transparent;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Digimon_Logo.svg/1280px-Digimon_Logo.svg.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    /*text-transform: uppercase;
+    text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000,
+             1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;*/
+}
+
 .digimons {
     display: grid;
     grid-template-columns: 1fr;
-    margin: 0;
-    padding: 0;
     list-style: none;
-}
-
-.normal {
-    background-color: #a6a877;
-}
-
-.GiantBird {
-    background-color: #77c850;
-}
-
-.fire {
-    background-color: #ee7f30;
-}
-
-.water {
-    background-color: #678fee;
-}
-
-.electric {
-    background-color: #f7cf2e;
-}
-
-.ice {
-    background-color: #98d5d7;
-}
-
-.ground {
-    background-color: #dfbf69;
-}
-
-.flying {
-    background-color: #a98ff0;
-}
-
-.poison {
-    background-color: #a040a0;
-}
-
-.fighting {
-    background-color: #bf3029;
-}
-
-.psychic {
-    background-color: #f65687;
-}
-
-.dark {
-    background-color: #725847;
-}
-
-.rock {
-    background-color: #b8a137;
-}
-
-.bug {
-    background-color: #a8b720;
-}
-
-.ghost {
-    background-color: #6e5896;
-}
-
-.steel {
-    background-color: #b9b7cf;
-}
-
-.dragon {
-    background-color: #6f38f6;
-}
-
-.fairy {
-    background-color: #f9aec7;
+    padding: 0;
+    margin: 0;
 }
 
 .digimon {
@@ -84,19 +43,20 @@
     margin: .5rem;
     padding: 1rem;
     border-radius: 1rem;
+    color: #e1e1e1;
+    cursor: pointer; 
 }
 
 .digimon .number {
-    color: #000;
-    opacity: .3;
+    color: rgba(0, 0, 0, 0.3);
     text-align: right;
-    font-size: .625rem;
+    font-size: .8rem;
 }
 
 .digimon .name {
-    text-transform: capitalize;
     color: #fff;
-    margin-bottom: .25rem;
+    margin-bottom: .5rem;
+    text-transform: capitalize;
 }
 
 .digimon .detail {
@@ -113,38 +73,75 @@
 }
 
 .digimon .detail .types .type {
-    color: #fff;
+    color: white;
     padding: .25rem .5rem;
-    margin: .25rem 0;
-    font-size: .625rem;
+    font-size: 0.625rem;
+    margin: .125rem 0;
     border-radius: 1rem;
-    filter: brightness(1.1);
     text-align: center;
+    filter: brightness(1.1);
 }
 
 .digimon .detail img {
     max-width: 100%;
     height: 70px;
+    align-self: flex-end;
+    border-radius: 1rem;
+    border: 2px solid rgba(0, 0, 0, 0.071);
 }
 
 .pagination {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    padding: 1rem;
+    padding: 1rem 0;
+    gap: 0.5rem; 
+}
+
+#pagination-container {
+    display: flex;
+    justify-content: center; /* Esta é a linha mais importante para o seu problema */
+    flex-wrap: wrap;         /* Esta linha permite que os botões quebrem para a linha de baixo */
+    align-items: center;
+    padding: 2rem 0;
+    gap: 8px;
 }
 
 .pagination button {
-    padding: .25rem .5rem;
-    margin: .25rem 0;
-    font-size: .625rem;
-    color: #fff;
-    background-color: #6c79db;
+    font-family: 'Roboto', sans-serif;
+    background-color: #4CAAE7; 
+    color: #DEE1F1;
     border: none;
-    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px; 
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    font-size: 40%;
 }
+
+.pagination button:hover:not(:disabled) {
+    background-color: #4CAAE7; 
+}
+
+.pagination button.active {
+    background-color: #F2AB31;
+    color: #333;
+}
+
+.pagination button:disabled {
+    background-color: #f6f8fc; 
+    color: #4CAAE7;
+    cursor: not-allowed;
+}
+
+.fresh { background-color: #C4DA5B; }
+.in-training { background-color: #E398C2; }
+.rookie { background-color: #77c850; }
+.champion { background-color: #DF3149; }
+.ultimate { background-color: #F4CADF; }
+.mega { background-color: #F2AB31; }
+.armor { background-color: #DEE1F1; }
 
 @media screen and (min-width: 380px) {
     .digimons {
@@ -159,6 +156,12 @@
 }
 
 @media screen and (min-width: 992px) {
+    .content {
+        max-width: 992px;
+        height: auto;
+        margin: 1rem auto;
+        border-radius: 1rem;
+    }
     .digimons {
         grid-template-columns: 1fr 1fr 1fr 1fr;
     }
